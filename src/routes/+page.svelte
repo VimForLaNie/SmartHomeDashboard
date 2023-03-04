@@ -1,10 +1,10 @@
 <script lang="ts">
 	// import ACcontroller from '../components/ACcontroller.svelte';
 	// import { onMount } from 'svelte';
-	// import Time from '../components/time.svelte';
-	// import OnOffcontroller from '../components/OnOffcontroller.svelte';
-	// import WattMeter from '../components/WattMeter.svelte';
-	// import Light from '../components/Light.svelte';
+	import Time from '../components/time.svelte';
+	import OnOffcontroller from '../components/OnOffcontroller.svelte';
+	import WattMeter from '../components/WattMeter.svelte';
+	import Light from '../components/Light.svelte';
 
 	let data: any = {};
 	let temp = "-";
