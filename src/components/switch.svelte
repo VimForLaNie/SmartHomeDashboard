@@ -3,7 +3,8 @@
 	export let name:string = "default"
 	let state: boolean;
 	const update = async () => {
-		const response = await fetch("http://34.124.227.14:3000/mqtt", {
+		state = !state
+		const response = await fetch("/api/post", {
 			method: 'POST', // *GET, POST, PUT, DELETE, etc.
 			// mode: 'cors', // no-cors, *cors, same-origin
 			// cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -16,10 +17,16 @@
 			// referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
 			body: JSON.stringify({
 				"topic" : name,
-				"msg" : state ? "1" : "0"
+				"payload" : state ? "0" : "1"
 			}), // body data type must match "Content-Type" header
 		});
 		console.log(response.status, state)
+		if(response.status == 200){
+			state = !state
+		}
+		else{
+			console.log("failed")
+		}
 	};
 </script>
 

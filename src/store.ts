@@ -1,4 +1,4 @@
-import { readable } from 'svelte/store';
+import { readable,writable } from 'svelte/store';
 
 export const time = readable(new Date(), function start(set) {
 	const interval = setInterval(() => {
@@ -9,3 +9,7 @@ export const time = readable(new Date(), function start(set) {
 		clearInterval(interval);
 	};
 });
+
+export const mqttData = writable(new Object());
+
+// export const mqttClient = readable(client);
