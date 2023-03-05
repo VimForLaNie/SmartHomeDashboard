@@ -1,5 +1,4 @@
 import type { RequestHandler } from '@sveltejs/kit';
-// import {get} from 'svelte/store';
 import mqtt from 'mqtt';
 const options = {
     // Clean session

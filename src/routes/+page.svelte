@@ -15,8 +15,8 @@
 
 	onMount(async () => {
 		setInterval(async () => {
-			data = await getData('/api/data');
-			temp = data.temp || '-';
+			data = await getData('/api/data?topic=temp');
+			// temp = data.temp || '-';
 			console.log(data);
 		}, 1000);
 	});
@@ -32,6 +32,13 @@
 		<OnOffcontroller SwitchName="AC" />
 		<OnOffcontroller room="Office" device="fan" SwitchName="Fan" />
 	</div>
-	<WattMeter value="12" />
-	<Light name="Hi" />
+	<div class="flex flex-row flex-wrap w-full">
+		<WattMeter value="12" />
+		<WattMeter value="" room='' name='' />
+	</div>
+	<div class="flex flex-row flex-wrap w-full">
+		{#each Array(8) as _, i}
+			<Light name={`Light ${i + 1}`} SwitchName={`light/${i}`}/>
+		{/each}
+	</div>
 </div>

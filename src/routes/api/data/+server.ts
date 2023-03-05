@@ -1,36 +1,20 @@
 import { json } from '@sveltejs/kit';
-import mqtt from 'mqtt';
 import type { RequestHandler } from '@sveltejs/kit';
-import { get } from 'svelte/store';
-import { mqttData } from '../../../store';
+import { MongoClient, ServerApiVersion } from 'mongodb';
+import type { MongoClientOptions } from 'mongodb';
 
-const options = {
-    // Clean session
-    clean: true,
-    connectTimeout: 4000,
-    // Authentication
-    clientId: 'svelte-mqtt',
-    username: 'pooh',
-    password: '4r*D.~*?wB*>3jBm'
-};
+const uri = "mongodb+srv://pooh:hnamDbKGYN2lmuqE@pooh.dnhlmdo.mongodb.net/?retryWrites=true&w=majority";
 
-const client = mqtt.connect('ws://34.143.162.7:9001/mqtt', options);
+const options: MongoClientOptions = {
+    serverApi: ServerApiVersion.v1
+}
 
-client.on('connect', () => {
-    client.subscribe('#');
-});
+const client = new MongoClient(uri, options);
 
-client.on('message', (topic, message) => {
-    console.log("message incoming");
-    mqttData.update((data: any) => {
-        data[topic] = message.toString();
-        console.log(data)
-        return data;
-    });
-    // console.log(topic, message.toString());
-});
+client.connect().then(() => console.log("connected to mongodb"));
 
-
-export const GET: RequestHandler = async () => {
-    return json(get(mqttData));
+export const GET: RequestHandler = async ({ url }) => {
+    const data = await client.db('MQTT').collection(url.searchParams.get('topic') ?? '').find().sort({_id:1}).limit(50).toArray();
+    console.log(data);
+    return json(data);
 }
