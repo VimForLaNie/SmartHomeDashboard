@@ -4,7 +4,7 @@
 	let state: boolean;
 	const update = async () => {
 		state = !state
-		const response = await fetch("/api/post", {
+		const response = await fetch("/api/posts", {
 			method: 'POST', // *GET, POST, PUT, DELETE, etc.
 			// mode: 'cors', // no-cors, *cors, same-origin
 			// cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
