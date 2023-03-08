@@ -34,6 +34,7 @@
 
 	const increaseTemp = () => {
 		console.log(state)
+		if(acTemp >= 30) { return; }
 		acTemp += 1;
 		acTemp = acTemp > 30 ? 30 : acTemp;
 		update("ac/tempup",1);
@@ -41,6 +42,7 @@
 
 	const decreaseTemp = () => {
 		console.log(state)
+		if(acTemp <= 16) { return; }
 		acTemp -= 1;
 		acTemp = acTemp < 16 ? 16 : acTemp;
 		update("ac/tempdown",1);
