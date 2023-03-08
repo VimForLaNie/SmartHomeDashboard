@@ -7,22 +7,30 @@
 
 	export let topicArray = ['test'];
 	export let nameArray = ['Plug1'];
-    export let data;
+    export let data:any;
+	let meterValue:any = []
 
 	const getData = async (url: string) => {
 		const res = await fetch(url);
 		return res.json();
 	};
-	// $: parse();
-	// $:data=[];
 
     const parse = async () => {
-        let res = [];
+        let res:any = [];
         for(const [i, topic] of topicArray.entries()){
             let temp = await getData(`/api/data?topic=${topic}&amount=10`);
-            temp.forEach((element: any) => {
-                element["group"] = nameArray[i];
-            });
+            // temp.forEach((element: any, idx:any) => {
+			// 	element["group"] = nameArray[i];
+            // });
+			for(let idx = 0; idx < temp.length; idx++){
+				temp[idx]["group"] = nameArray[i];
+				if(idx > 0){
+					let dT = ((new Date(temp[idx]["time"])).getTime() - (new Date(temp[idx-1]["time"]).getTime())) / 1000;
+					let unit = parseInt(temp[idx]["payload"])/1000 * (dT / 3600);
+					// console.log(dT, unit);
+					meterValue[i] = (meterValue[i] ?? 0) + unit;
+				}
+			}
             res = [...res,...temp];
         }
         return res;
@@ -30,41 +38,26 @@
 
 	onMount(async () => {
         data = await parse();
-		// data = topicArray.map(async (topic, i) => {
-		// 	let temp = await getData(`/api/data?topic=${topic}&amount=10`);
-		// 	temp.forEach((element: any) => {
-		// 		element["group"] = nameArray[i];
-		// 		data.push(element);
-		// 	});
-		//     return temp;
-		// });
-        // console.log(data)
-		// data = await getData(`/api/data?topic=test&amount=10`);
-		console.log(data)
-        // setInterval(() => console.log(data),1000);
+		console.log(data);
+		// console.log(meterValue)
 	});
-    let gram = [
-		{
-			group: 'Dataset 1',
-			time: 12,
-			payload: 34200
-		},
-		{
-			group: 'Dataset 1',
-			time: 124,
-			payload: 23500
-		}
-	]
 </script>
 
-{#each nameArray as name}
-	<WattMeter room="LivingRoom" {name} value=""/>
-{/each}
+<div class="autoGrid w-full">
+	{#each nameArray as name,i}
+		<WattMeter room="Living Room" name={name} value={Math.trunc(meterValue[i])} />
+	{/each}
+</div>
+
 
 <!-- {#if data} -->
 <LineChart
 	data={data ?? []}
 	options={{
+		// legend: {
+		// 	enabled: false,
+		// 	// position: 'bottom'
+		// },
 		title: 'Power Consumption',
 		axes: {
 			bottom: {
@@ -87,3 +80,10 @@
 <!-- {:else}
     <p>Loading...</p>
 {/if} -->
+<style>
+.autoGrid {
+	display: grid;
+	grid-template-rows: auto;
+	grid-template-columns: repeat(auto-fit, minmax(min(100%/1, max(12rem, 100%/4)), 1fr));
+}
+</style>

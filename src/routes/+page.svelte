@@ -12,12 +12,12 @@
 <div class="flex flex-col self-center text-white items-center p-8 bg-zinc-900 w-full">
 	<Time temp="19" aq="109" />
 	<AC />	
-	<div class="gram w-full">
+	<div class="autoGrid w-full">
 		{#each Array(8) as _,i}
 			<OnOffcontroller device={`Relay ${i + 1}`} room={`Living Room`} SwitchName={`light/${i}`} />
 		{/each}
 	</div>
-	<WattGraph />
+	<WattGraph topicArray={['watt']} nameArray={['Plug1']}/>
 	<!-- <div class="flex flex-row flex-wrap w-full">
 		{#each Array(8) as _, i}
 			<Light name={`Light ${i + 1}`} SwitchName={`light/${i}`} />
@@ -52,9 +52,9 @@
 </div>
 
 <style>
-	.gram {
-		display: grid;
-		grid-template-rows: auto;
-		grid-template-columns: repeat(auto-fit, minmax(min(100%/1, max(12rem, 100%/4)), 1fr));
-	}
+.autoGrid {
+	display: grid;
+	grid-template-rows: auto;
+	grid-template-columns: repeat(auto-fit, minmax(min(100%/1, max(12rem, 100%/4)), 1fr));
+}
 </style>

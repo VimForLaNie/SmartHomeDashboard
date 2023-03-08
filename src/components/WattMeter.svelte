@@ -13,9 +13,10 @@
 		<p class="text-gray-500 text-base text-left">{room}</p>
 		<p class="text-white text-lg text-center">{name}</p>
 	</div>
-	<div class="flex items-center">
+	<div class="flex items-center justify-end w-1/4">
 		<p class="text-lg m-2">{value}</p>
 		<span class="material-icons md-36 yellow self-center">offline_bolt</span>
+		<p class="text-lg m-2">{parseInt(value) * 4} Baht</p>
 	</div>
 </div>
 
