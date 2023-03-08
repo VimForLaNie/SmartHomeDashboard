@@ -10,7 +10,7 @@
 </script>
 
 <div class="flex flex-col self-center text-white items-center p-8 bg-zinc-900 w-full">
-	<Time temp="19" aq="109" />
+	<Time />
 	<AC />	
 	<div class="autoGrid w-full">
 		{#each Array(8) as _,i}

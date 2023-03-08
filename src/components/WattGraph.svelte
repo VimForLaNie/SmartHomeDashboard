@@ -7,7 +7,7 @@
 
 	export let topicArray = ['test'];
 	export let nameArray = ['Plug1'];
-    export let data:any;
+    let data:any;
 	let meterValue:any = []
 
 	const getData = async (url: string) => {
@@ -25,10 +25,12 @@
 			for(let idx = 0; idx < temp.length; idx++){
 				temp[idx]["group"] = nameArray[i];
 				if(idx > 0){
+					if(temp[idx]["payload"] == ""){ continue;}
 					let dT = ((new Date(temp[idx]["time"])).getTime() - (new Date(temp[idx-1]["time"]).getTime())) / 1000;
 					let unit = parseInt(temp[idx]["payload"])/1000 * (dT / 3600);
+					console.log(`unit: ${unit} dT: ${dT} \n${temp[idx]["payload"]}`);
 					// console.log(dT, unit);
-					meterValue[i] = (meterValue[i] ?? 0) + unit;
+					meterValue[i] = (meterValue[i] ?? 0) + (unit ?? 0);
 				}
 			}
             res = [...res,...temp];
@@ -39,18 +41,19 @@
 	onMount(async () => {
         data = await parse();
 		console.log(data);
-		// console.log(meterValue)
+		console.log(meterValue)
 	});
 </script>
 
 <div class="autoGrid w-full">
 	{#each nameArray as name,i}
-		<WattMeter room="Living Room" name={name} value={Math.trunc(meterValue[i])} />
+		<WattMeter room="Living Room" name={name} value={Math.trunc(meterValue[i]).toString()} />
 	{/each}
 </div>
 
 
-<!-- {#if data} -->
+{#if data}
+<div class="w-full" style="max-height: 52rem;">
 <LineChart
 	data={data ?? []}
 	options={{
@@ -77,9 +80,10 @@
 		theme: 'g90'
 	}}
 />
-<!-- {:else}
+</div>
+{:else}
     <p>Loading...</p>
-{/if} -->
+{/if}
 <style>
 .autoGrid {
 	display: grid;

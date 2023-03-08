@@ -1,19 +1,19 @@
 import type { RequestHandler } from '@sveltejs/kit';
-import mqtt from 'mqtt';
-const options = {
-    // Clean session
-    clean: true,
-    connectTimeout: 4000,
-    // Authentication
-    clientId: 'svelte-mqtt',
-    username: 'pooh',
-    password: '4r*D.~*?wB*>3jBm'
-};
+import { MongoClient, ServerApiVersion } from 'mongodb';
+import type { MongoClientOptions } from 'mongodb';
 
-const client = mqtt.connect('ws://34.143.162.7:9001/mqtt', options);
+const uri = "mongodb+srv://pooh:hnamDbKGYN2lmuqE@pooh.dnhlmdo.mongodb.net/?retryWrites=true&w=majority";
+
+const options: MongoClientOptions = {
+    serverApi: ServerApiVersion.v1
+}
+
+const client = new MongoClient(uri, options);
+
+client.connect().then(() => console.log("connected to mongodb")).catch(err => console.log(err));
 
 export const POST:RequestHandler = async ({request}) => {
     let body = await request.json();
-    client.publish(body.topic, body.payload);
+    client.db('MQTT').collection('mqtt write').insertOne(body);
     return new Response('Hello world' + ' ' + body.topic + ' ' + body.payload);
 }

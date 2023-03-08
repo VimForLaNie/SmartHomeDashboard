@@ -1,4 +1,5 @@
 <script lang="ts">
+	let color:HTMLSpanElement
 	let roomTemp = 26;
 	let acTemp = 25;
     let state = false;
@@ -18,7 +19,7 @@
 			// redirect: 'follow', // manual, *follow, error
 			// referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
 			body: JSON.stringify({
-				"topic" : "app/" + topic.toString(),
+				"topic" : topic.toString(),
 				"payload" : value.toString()
 			}), // body data type must match "Content-Type" header
 		});
@@ -32,20 +33,34 @@
 	};
 
 	const increaseTemp = () => {
+		console.log(state)
 		acTemp += 1;
 		acTemp = acTemp > 30 ? 30 : acTemp;
 		update("ac/tempup",1);
 	};
 
 	const decreaseTemp = () => {
+		console.log(state)
 		acTemp -= 1;
 		acTemp = acTemp < 16 ? 16 : acTemp;
 		update("ac/tempdown",1);
 	};
 
     const toggle = () => {
-        state = !state;
+		if(state){
+			color.classList.remove("active:bg-red-600");
+			color.classList.remove("bg-green-400");
+			color.classList.add("bg-red-400");
+			color.classList.add("active:bg-green-600");
+		}
+		else{
+			color.classList.remove("bg-red-400");
+			color.classList.remove("active:bg-green-600");
+			color.classList.add("bg-green-400");
+			color.classList.add("active:bg-red-600");
+		}
 		update("ac", state ? 1 : 0);
+        state = !state;
     }
 
 </script>
@@ -73,19 +88,19 @@
 			</button>
 		</div>
 	</div>
-    {#if !state}
+    <!-- {#if !state} -->
     <button on:click={toggle}>
-        <span class="material-icons md-24 bg-red-400 p-4 m-4 rounded-full active:bg-green-600 transition-all">
+        <span class="material-icons md-24 bg-red-400 active:bg-green-600 p-4 m-4 rounded-full transition-all" bind:this={color}>
             power_settings_new
         </span>
     </button>
-    {:else}
+    <!-- {:else}
     <button on:click={toggle}>
-        <span class="material-icons md-24 bg-green-400 p-4 m-4 rounded-full active:bg-red-600 transition-all">
+        <span class="material-icons md-24 bg-green-400 p-4 m-4 rounded-full transition-all">
             power_settings_new
         </span>
     </button>
-    {/if}
+    {/if} -->
 </div>
 {:else}
 	<button on:click={() => popup = true}>
