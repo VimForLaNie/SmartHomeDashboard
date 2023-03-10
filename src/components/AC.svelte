@@ -1,6 +1,7 @@
 <script lang="ts">
+	import { onMount } from "svelte";
+
 	let color:HTMLSpanElement
-	let roomTemp = 26;
 	let acTemp = 25;
     let state = false;
 	let popup = false;
@@ -65,6 +66,16 @@
         state = !state;
     }
 
+	let roomTemp:any;
+	onMount(async () => {
+		roomTemp = await fetch("/api/data?topic=temp&amount=1").then((res) => res.json());
+		if(roomTemp.length > 0){
+			roomTemp = roomTemp[0].payload;
+		}
+		else{
+			roomTemp = "N/A";
+		}
+	})
 </script>
 
 {#if popup}
