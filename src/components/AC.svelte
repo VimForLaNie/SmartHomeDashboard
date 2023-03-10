@@ -76,8 +76,9 @@
 			color.classList.add("bg-green-400");
 			color.classList.add("active:bg-red-600");
 		}
+		console.log(state)
 		update("ac", state ? 1 : 0);
-        state = !state;
+        // state = !state;
     }
 
 	let roomTemp:any;
