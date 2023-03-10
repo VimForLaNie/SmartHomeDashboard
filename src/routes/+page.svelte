@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import Time from '../components/time.svelte';
+	import Show from '../components/Show.svelte';
+	// import Time from '../components/time.svelte';
 	import OnOffcontroller from '../components/OnOffcontroller.svelte';
 	import WattGraph from '../components/WattGraph.svelte';
 	import AC from '../components/AC.svelte';
 	import Graph from '../components/graph.svelte';
-	import { LineChart } from '@carbon/charts-svelte';
 	import '@carbon/styles/css/styles.css';
 	import '@carbon/charts/styles.css';
 
@@ -38,13 +38,21 @@
 </script>
 
 <div class="flex flex-col self-center text-white items-center p-8 bg-zinc-900 w-full">
-	<Time />
 	<AC />	
 	<div class="autoGrid w-full">
 		{#each Array(8) as _,i}
 			<OnOffcontroller device={`Relay ${i + 1}`} room={`Living Room`} SwitchName={`light/${i}`} />
 		{/each}
 	</div>
+	<div class="autoGrid w-full">
+		<Show room="Living Room" name="Temperature" unit="C" value="temp"/>
+		<Show room="Living Room" name="Humidity" unit="%" value="humidity"/>
+		<Show room="Living Room" name="Dust" unit="ug/m3" value="dust"/>
+		<Show room="Living Room" name="UV" unit="" value="uv"/>
+		<Show room="Living Room" name="Smoke" unit="ug/m3" value="smoke"/>
+		<!-- <Show room="Living Room" name="Temperature" unit="C"/> -->
+	</div>
+
 	<WattGraph topicArray={['watt']} nameArray={['Plug1']}/>
 	<Graph data={tempGraphData} title="Temperature" name="Temperature"/>
 	<Graph data={humGraphData} title="Humidity" name="Humidity"/>

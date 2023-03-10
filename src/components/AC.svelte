@@ -5,6 +5,7 @@
 	let acTemp = 25;
     let state = false;
 	let popup = false;
+	let fanMode = 0;
 
 	const update = async (topic:string, value:number) => {
 		state = !state
@@ -98,6 +99,11 @@
 		// 	}
 		// }, 1000);
 	})
+
+	const changeFanMode = () => {
+		fanMode = fanMode == 3 ? 0 : fanMode + 1;
+		update("ac/fan", fanMode);
+	}
 </script>
 
 {#if popup}
@@ -109,7 +115,14 @@
 			<span class="material-icons md-18 self-center"> close </span>
 		</button>
 		<div class="flex flex-row items-center px-6 py-2">
-			<p class="text-3xl mx-2">{roomTemp}<span>&#176;</span>C</p>
+			<div class="flex flex-col">
+				<button on:click={changeFanMode}>
+					<span class="material-symbols-outlined p-2 m-2 bg-slate-700 rounded-full">
+						mode_fan
+					</span>
+				</button>
+				<p class="text-blue-200 self-center">{fanMode != 0 ? fanMode : "auto"}</p>
+			</div>
 			<div class="flex flex-col mx-2">
 				<button
 					class="hover:opacity-90 transition-opacity active:opacity-70"
@@ -153,7 +166,7 @@
 			class="material-icons md-24 bg-blue-400 p-4 m-4 rounded-full active:bg-blue-600 
 		transition-all float fixed z-20 bottom-1 right-1"
 		>
-			air
+			ac_unit
 		</span>
 	</button>
 {/if}
