@@ -33,7 +33,7 @@
 	<div class="self-center text-5xl">
 		{formatter.format($time)}
 	</div>
-	<div class="flex flex-row self-center">
+	<div class="flex flex-row self-center flex-wrap">
 		<p class="flex self-center text-base text-gray-400 m-2">Dust:{dust} ug/m3</p>
 		<p class="flex self-center text-base text-gray-400 m-2">UV:{uv}</p>
 		<p class="flex self-center text-base text-gray-400 m-2">Humidity:{Humudity} %</p>

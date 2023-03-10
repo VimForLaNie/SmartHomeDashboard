@@ -1,9 +1,9 @@
 <script lang="ts">
-    export let data:any;
-    export let title:string;
-	export let name:string;
+	export let data: any;
+	export let title: string;
+	export let name: string;
 
-    import { LineChart } from '@carbon/charts-svelte';
+	import { LineChart } from '@carbon/charts-svelte';
 	import '@carbon/styles/css/styles.css';
 	import '@carbon/charts/styles.css';
 	import { onMount } from 'svelte';
@@ -21,34 +21,37 @@
 </script>
 
 {#if data}
-<div class="w-full">
-<LineChart
-	data={data}
-	options={{
-		legend: {
-			enabled: true,
-			// position: 'bottom'
-		},
-		title: title,
-		axes: {
-			bottom: {
-				title: 'Time',
-				mapsTo: 'time',
-				visible: false,
-				scaleType: 'time'
-			},
-			left: {
-				title: name,
-				mapsTo: 'payload',
-				scaleType: 'linear'
-			}
-		},
-		curve: 'curveMonotoneX',
-		resizable: true,
-		theme: 'g90'
-	}}
-/>
-</div>
+	<div class="w-full">
+		<LineChart
+			{data}
+			options={{
+				legend: {
+					enabled: true
+					// position: 'bottom'
+				},
+				title: title,
+				axes: {
+					bottom: {
+						title: 'Time',
+						mapsTo: 'time',
+						visible: false,
+						scaleType: 'time'
+					},
+					left: {
+						title: name,
+						mapsTo: 'payload',
+						scaleType: 'linear'
+					}
+				},
+				curve: 'curveMonotoneX',
+				resizable: true,
+				theme: 'g90',
+				points: {
+					enabled: false
+				}
+			}}
+		/>
+	</div>
 {:else}
-    <p>Loading...</p>
+	<p>Loading...</p>
 {/if}

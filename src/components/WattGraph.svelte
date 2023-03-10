@@ -16,24 +16,22 @@
     const parse = async () => {
         let res:any = [];
         for(const [i, topic] of topicArray.entries()){
-            let temp = await getData(`/api/data?topic=${topic}&amount=9999`);
-            // temp.forEach((element: any, idx:any) => {
-			// 	element["group"] = nameArray[i];
-            // });
-			for(let idx = 0; idx < temp.length; idx++){
+            let temp = await getData(`/api/data?topic=${topic}&amount=1000&sort=-1`);
+			// console.log(temp)
+			for(let idx = temp.length - 1; idx >= 0; idx--){
 				temp[idx]["group"] = nameArray[i];
-				if(idx < temp.length - 1){
-					if(temp[idx]["payload"] == ""){ continue;}
-					let dT = ((new Date(temp[idx]["time"])).getTime() - (new Date(temp[idx+1]["time"]).getTime())) / 1000;
-					let aW = parseInt(temp[idx]["payload"])/1000;
-					let bW = parseInt(temp[idx+1]["payload"])/1000;
-					let unit = (aW+bW)/2 * (dT / 3600);
-					// console.log(`unit: ${unit} dT: ${dT} \n${temp[idx]["payload"]}`);
-					// console.log(dT, unit);
-					meterValue[i] = meterValue[i] + unit;
-					if(isNaN(meterValue[i])) meterValue[i] = 0;
+				let currWatt = parseInt(temp[idx]["payload"]) / 100;
+				let currTime = (new Date(temp[idx]["time"])).getTime();
+				if(idx == 0) {
+					temp[idx]["payload"] = (currWatt * ((Date.now() - currTime) / 3600000) * 4) + (temp[idx+1]?.payload ?? 0);
+					meterValue[i] = currWatt;
+					break;
 				}
+				let prevTime = (new Date(temp[idx-1]["time"])).getTime();
+				let dT = prevTime - currTime;
+				temp[idx].payload = (currWatt * (dT / 3600000) * 4) + (temp[idx+1]?.payload ?? 0);
 			}
+			// console.log(temp[temp.length-1]["payload"])
             res = [...res,...temp];
         }
         return res;
@@ -61,7 +59,7 @@
 				enabled: true,
 				// position: 'bottom'
 			},
-			title: "Power Consumption",
+			title: "Electricity Consumption",
 			axes: {
 				bottom: {
 					title: 'Time',
@@ -70,14 +68,17 @@
 					scaleType: 'time'
 				},
 				left: {
-					title: 'Power',
+					title: 'Bath',
 					mapsTo: 'payload',
 					scaleType: 'linear'
 				}
 			},
 			curve: 'curveMonotoneX',
 			resizable: true,
-			theme: 'g90'
+			theme: 'g90',
+			points : {
+				enabled : false
+			}
 		}}
 	/>
 {:else}

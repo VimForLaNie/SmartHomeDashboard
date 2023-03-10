@@ -83,15 +83,10 @@
 
 	let roomTemp:any;
 	onMount(async () => {
-		roomTemp = await fetch("/api/data?topic=temp&amount=1").then((res) => res.json());
+		roomTemp = parseInt((await fetch("/api/data?topic=temp&amount=1").then((res) => res.json()))[0].payload) / 100;
+		console.log(roomTemp)
 		acTemp = parseInt(await fetch("/api/read?id=ac").then((res) => res.json()).then((res) => res.value));
 		// console.log(acTemp)
-		if(roomTemp.length > 0){
-			roomTemp = roomTemp[0].payload;
-		}
-		else{
-			roomTemp = "N/A";
-		}
 		// setInterval(async () => {
 		// 	acTemp = await fetch("/api/read?id=ac").then((res) => res.json()).then((res) => res.value);
 		// 	roomTemp = await fetch("/api/data?topic=temp&amount=1").then((res) => res.json());

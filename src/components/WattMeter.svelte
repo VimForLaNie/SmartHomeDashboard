@@ -14,9 +14,9 @@
 		<p class="text-white text-lg text-center">{name}</p>
 	</div>
 	<div class="flex items-center justify-end w-1/4">
-		<p class="text-lg m-2">{value}</p>
-		<span class="material-icons md-36 yellow self-center">offline_bolt</span>
-		<p class="text-lg m-2">{(parseFloat(value) * 4).toFixed(2)} Baht</p>
+		<!-- <p class="text-lg m-2">{value}</p>
+		<span class="material-icons md-36 yellow self-center">offline_bolt</span> -->
+		<p class="text-lg m-2">{(parseFloat(value) * 4).toFixed(2)} Baht/Hour</p>
 	</div>
 </div>
 
