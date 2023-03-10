@@ -1,10 +1,12 @@
 <script lang="ts">
+	import { onMount } from "svelte";
 
-	export let name:string = "default"
+
+	export let name: string = 'default';
 	let state: boolean;
 	const update = async () => {
-		state = !state
-		const response = await fetch("/api/posts", {
+		state = !state;
+		const response = await fetch('/api/posts', {
 			method: 'POST', // *GET, POST, PUT, DELETE, etc.
 			// mode: 'cors', // no-cors, *cors, same-origin
 			// cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
@@ -16,18 +18,41 @@
 			// redirect: 'follow', // manual, *follow, error
 			// referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
 			body: JSON.stringify({
-				"topic" : name,
-				"payload" : state ? "0" : "1"
-			}), // body data type must match "Content-Type" header
+				topic: name,
+				payload: state ? '0' : '1'
+			}) // body data type must match "Content-Type" header
 		});
-		console.log(response.status, state)
-		if(response.status == 200){
-			state = !state
-		}
-		else{
-			console.log("failed")
+		const sync = await fetch('/api/write', {
+			method: 'POST', // *GET, POST, PUT, DELETE, etc.
+			// mode: 'cors', // no-cors, *cors, same-origin
+			// cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+			// credentials: 'same-origin', // include, *same-origin, omit
+			headers: {
+				'Content-Type': 'application/json'
+				// 'Content-Type': 'application/x-www-form-urlencoded',
+			},
+			// redirect: 'follow', // manual, *follow, error
+			// referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+			body: JSON.stringify({
+				id: name,
+				value: state ? '0' : '1'
+			}) // body data type must match "Content-Type" header
+		});
+		// console.log(response.status, state);
+		// console.log(sync.status, state);
+		if (response.status == 200 && sync.status == 200) {
+			state = !state;
+		} else {
+			console.log('failed');
 		}
 	};
+	
+	onMount(async () => {
+		state = await fetch(`/api/read?id=${name}`)
+			.then((res) => res.json())
+			.then((data) => data.value == '1' ? true : false)
+			.catch((err) => console.log(err)) ?? false;
+	});
 </script>
 
 <label class="switch">
