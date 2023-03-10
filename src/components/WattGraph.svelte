@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import WattMeter from './WattMeter.svelte';
-	import Graph from './graph.svelte';
+	import { LineChart } from '@carbon/charts-svelte';
 
 	export let topicArray = ['test'];
 	export let nameArray = ['Plug1'];
@@ -26,9 +26,10 @@
 					if(temp[idx]["payload"] == ""){ continue;}
 					let dT = ((new Date(temp[idx]["time"])).getTime() - (new Date(temp[idx-1]["time"]).getTime())) / 1000;
 					let unit = parseInt(temp[idx]["payload"])/1000 * (dT / 3600);
-					console.log(`unit: ${unit} dT: ${dT} \n${temp[idx]["payload"]}`);
+					// console.log(`unit: ${unit} dT: ${dT} \n${temp[idx]["payload"]}`);
 					// console.log(dT, unit);
 					meterValue[i] = meterValue[i] + unit;
+					if(isNaN(meterValue[i])) meterValue[i] = 0;
 				}
 			}
             res = [...res,...temp];
@@ -49,7 +50,38 @@
 	{/each}
 </div>
 
-<Graph data={data} title={"Electricity Consumption"}/>
+<div class="w-full">
+{#if data}
+	<LineChart
+		data={data ?? []}
+		options={{
+			legend: {
+				enabled: true,
+				// position: 'bottom'
+			},
+			title: "Power Consumption",
+			axes: {
+				bottom: {
+					title: 'Time',
+					mapsTo: 'time',
+					visible: false,
+					scaleType: 'time'
+				},
+				left: {
+					title: 'Power',
+					mapsTo: 'payload',
+					scaleType: 'linear'
+				}
+			},
+			curve: 'curveMonotoneX',
+			resizable: true,
+			theme: 'g90'
+		}}
+	/>
+{:else}
+	<p>Loading...</p>
+{/if}
+</div>
 
 <style>
 .autoGrid {

@@ -19,7 +19,7 @@
 			uv = await fetch('/api/data?topic=uv&amount=1').then((res) => res.json());
 			uv = uv.length ? uv[0].payload : '-';
 			Humudity = await fetch('/api/data?topic=humidity&amount=1').then((res) => res.json());
-			Humudity = Humudity.length ? Humudity[0].payload : '-';
+			Humudity = Humudity.length ? Humudity[0].payload/100 : '-';
 			smoke = await fetch('/api/data?topic=smoke&amount=1').then((res) => res.json());
 			smoke = smoke.length ? smoke[0].payload : '-';
 			lpg = await fetch('/api/data?topic=lpg&amount=1').then((res) => res.json());
@@ -36,6 +36,6 @@
 		<p class="flex self-center text-base text-gray-400 m-2">Dust:{dust} ug/m3</p>
 		<p class="flex self-center text-base text-gray-400 m-2">UV:{uv}</p>
 		<p class="flex self-center text-base text-gray-400 m-2">Humidity:{Humudity} %</p>
-		<p class="flex self-center text-base text-gray-400 m-2">smoke:{smoke}</p>
+		<p class="flex self-center text-base text-gray-400 m-2">Smoke:{smoke}</p>
 	</div>
 </div>

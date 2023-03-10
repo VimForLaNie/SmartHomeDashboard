@@ -5,6 +5,9 @@
 	import WattGraph from '../components/WattGraph.svelte';
 	import AC from '../components/AC.svelte';
 	import Graph from '../components/graph.svelte';
+	import { LineChart } from '@carbon/charts-svelte';
+	import '@carbon/styles/css/styles.css';
+	import '@carbon/charts/styles.css';
 
 	let tempGraphData:any;
 	let humGraphData:any;
@@ -12,10 +15,25 @@
 	let uvGraphData:any;
 
 	onMount(async () => {
-		tempGraphData = await fetch('/api/data?topic=app/temp&amount=1000').then(res => res.json());
-		humGraphData = await fetch('/api/data?topic=app/humidity&amount=1000').then(res => res.json());
-		dustGraphData = await fetch('/api/data?topic=app/dust&amount=1000').then(res => res.json());
-		uvGraphData = await fetch('/api/data?topic=app/uv&amount=1000').then(res => res.json());
+		tempGraphData = (await fetch('/api/data?topic=temp&amount=1000').then(res => res.json())).map((d:any) => {
+			d.group = "Temperature";
+			d.payload = d.payload / 100;
+			return d;
+		})
+		humGraphData = (await fetch('/api/data?topic=humidity&amount=20').then(res => res.json())).map((d:any) => {
+			d.group = "Humidity";
+			d.payload = d.payload / 100;
+			return d;
+		})
+		dustGraphData = (await fetch('/api/data?topic=dust&amount=20').then(res => res.json())).map((d:any) => {
+			d.group = "Dust Density";
+			return d;
+		})
+		uvGraphData = (await fetch('/api/data?topic=uv&amount=20').then(res => res.json())).map((d:any) => {
+			d.group = "UV";
+			return d;
+		})
+		// console.log(tempGraphData, humGraphData, dustGraphData, uvGraphData);
 	});
 </script>
 
@@ -28,10 +46,10 @@
 		{/each}
 	</div>
 	<WattGraph topicArray={['watt']} nameArray={['Plug1']}/>
-	<Graph data={tempGraphData} title="Temperature"/>
-	<Graph data={humGraphData} title="Humidity"/>
-	<Graph data={dustGraphData} title="Dust Density"/>
-	<Graph data={uvGraphData} title="UV"/>
+	<Graph data={tempGraphData} title="Temperature" name="Temperature"/>
+	<Graph data={humGraphData} title="Humidity" name="Humidity"/>
+	<Graph data={dustGraphData} title="Dust Density" name="Dust Density"/>
+	<Graph data={uvGraphData} title="UV" name="UV"/>
 </div>
 
 <style>

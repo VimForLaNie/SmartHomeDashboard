@@ -57,9 +57,9 @@
 
 	onMount(async () => {
 		state = await getData();
-		setInterval(async () => {
-			state = await getData();
-		}, 1000);
+		// setInterval(async () => {
+		// 	state = await getData();
+		// }, 1000);
 	});
 </script>
 

@@ -30,7 +30,7 @@
 		// console.log(state)
 		if(acTemp >= 30) { return; }
 		acTemp += 1;
-		acTemp = acTemp > 30 ? 30 : acTemp;
+		// acTemp = acTemp > 30 ? 30 : acTemp;
 		sync(acTemp);
 		update("ac/tempup",1);
 	};
@@ -39,7 +39,7 @@
 		// console.log(state)
 		if(acTemp <= 16) { return; }
 		acTemp -= 1;
-		acTemp = acTemp < 16 ? 16 : acTemp;
+		// acTemp = acTemp < 16 ? 16 : acTemp;
 		sync(acTemp);
 		update("ac/tempdown",1);
 	};
@@ -83,7 +83,7 @@
 	let roomTemp:any;
 	onMount(async () => {
 		roomTemp = await fetch("/api/data?topic=temp&amount=1").then((res) => res.json());
-		acTemp = await fetch("/api/read?id=ac").then((res) => res.json()).then((res) => res.value);
+		acTemp = parseInt(await fetch("/api/read?id=ac").then((res) => res.json()).then((res) => res.value));
 		// console.log(acTemp)
 		if(roomTemp.length > 0){
 			roomTemp = roomTemp[0].payload;
@@ -91,16 +91,16 @@
 		else{
 			roomTemp = "N/A";
 		}
-		setInterval(async () => {
-			acTemp = await fetch("/api/read?id=ac").then((res) => res.json()).then((res) => res.value);
-			roomTemp = await fetch("/api/data?topic=temp&amount=1").then((res) => res.json());
-			if(roomTemp.length > 0){
-				roomTemp = roomTemp[0].payload;
-			}
-			else{
-				roomTemp = "N/A";
-			}
-		}, 1000);
+		// setInterval(async () => {
+		// 	acTemp = await fetch("/api/read?id=ac").then((res) => res.json()).then((res) => res.value);
+		// 	roomTemp = await fetch("/api/data?topic=temp&amount=1").then((res) => res.json());
+		// 	if(roomTemp.length > 0){
+		// 		roomTemp = roomTemp[0].payload;
+		// 	}
+		// 	else{
+		// 		roomTemp = "N/A";
+		// 	}
+		// }, 1000);
 	})
 </script>
 
@@ -119,7 +119,7 @@
 					class="hover:opacity-90 transition-opacity active:opacity-70"
 					on:click={increaseTemp}
 				>
-					<span class="material-icons md-36 self-center bg-blue-300 rounded-full my-2 "
+					<span class="material-icons md-36 self-center bg-blue-500 rounded-full my-2 "
 						>keyboard_arrow_up</span
 					>
 				</button>
@@ -128,7 +128,7 @@
 					class="hover:opacity-90 transition-opacity active:opacity-70"
 					on:click={decreaseTemp}
 				>
-					<span class="material-icons md-36 self-center bg-blue-300 rounded-full my-2"
+					<span class="material-icons md-36 self-center bg-blue-500 rounded-full my-2"
 						>keyboard_arrow_down</span
 					>
 				</button>
