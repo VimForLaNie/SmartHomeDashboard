@@ -32,7 +32,7 @@
 		if(acTemp >= 30) { return; }
 		acTemp += 1;
 		// acTemp = acTemp > 30 ? 30 : acTemp;
-		sync(acTemp);
+		sync("ac",acTemp);
 		update("ac/tempup",1);
 	};
 
@@ -41,11 +41,11 @@
 		if(acTemp <= 16) { return; }
 		acTemp -= 1;
 		// acTemp = acTemp < 16 ? 16 : acTemp;
-		sync(acTemp);
+		sync("ac",acTemp);
 		update("ac/tempdown",1);
 	};
 
-	const sync = async (value:number) => {
+	const sync = async (name,value:number) => {
 			const response = await fetch("/api/write", {
 			method: 'POST', // *GET, POST, PUT, DELETE, etc.
 			// mode: 'cors', // no-cors, *cors, same-origin
@@ -58,7 +58,7 @@
 			// redirect: 'follow', // manual, *follow, error
 			// referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
 			body: JSON.stringify({
-				"id" : "ac",
+				"id" : name.toString(),
 				"value" : value.toString()
 			}), // body data type must match "Content-Type" header
 		});
@@ -78,7 +78,7 @@
 			color.classList.add("active:bg-red-600");
 		}
 		console.log(state)
-		update("ac", state ? 1 : 0);
+		update("ac/power", state ? 1 : 0);
         // state = !state;
     }
 
@@ -87,6 +87,7 @@
 		roomTemp = parseInt((await fetch("/api/data?topic=temp&amount=1").then((res) => res.json()))[0].payload) / 100;
 		console.log(roomTemp)
 		acTemp = parseInt(await fetch("/api/read?id=ac").then((res) => res.json()).then((res) => res.value));
+		fanMode = parseInt(await fetch("/api/read?id=fan").then((res) => res.json()).then((res) => res.value));
 		// console.log(acTemp)
 		// setInterval(async () => {
 		// 	acTemp = await fetch("/api/read?id=ac").then((res) => res.json()).then((res) => res.value);
@@ -102,6 +103,7 @@
 
 	const changeFanMode = () => {
 		fanMode = fanMode == 3 ? 0 : fanMode + 1;
+		sync("fan",fanMode);
 		update("ac/fan", fanMode);
 	}
 </script>
