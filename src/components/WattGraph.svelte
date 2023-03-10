@@ -28,7 +28,7 @@
 					let unit = parseInt(temp[idx]["payload"])/1000 * (dT / 3600);
 					console.log(`unit: ${unit} dT: ${dT} \n${temp[idx]["payload"]}`);
 					// console.log(dT, unit);
-					meterValue[i] = (meterValue[i] ?? 0) + (unit ?? 0);
+					meterValue[i] = meterValue[i] + unit;
 				}
 			}
             res = [...res,...temp];
@@ -45,11 +45,11 @@
 
 <div class="autoGrid w-full">
 	{#each nameArray as name,i}
-		<WattMeter room="Living Room" name={name} value={Math.trunc(meterValue[i]).toString()} />
+		<WattMeter room="Living Room" name={name} value={meterValue[i]} />
 	{/each}
 </div>
 
-<Graph data={data} />
+<Graph data={data} title={"Electricity Consumption"}/>
 
 <style>
 .autoGrid {

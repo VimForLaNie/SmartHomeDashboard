@@ -1,5 +1,6 @@
 <script lang="ts">
     export let data:any;
+    export let title:string;
 
     import { LineChart } from '@carbon/charts-svelte';
 	import '@carbon/styles/css/styles.css';
@@ -16,7 +17,7 @@
 		// 	enabled: false,
 		// 	// position: 'bottom'
 		// },
-		title: 'Power Consumption',
+		title: title,
 		axes: {
 			bottom: {
 				title: 'Time',

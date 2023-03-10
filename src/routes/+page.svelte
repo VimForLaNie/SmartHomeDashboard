@@ -4,7 +4,19 @@
 	import OnOffcontroller from '../components/OnOffcontroller.svelte';
 	import WattGraph from '../components/WattGraph.svelte';
 	import AC from '../components/AC.svelte';
+	import Graph from '../components/graph.svelte';
 
+	let tempGraphData:any;
+	let humGraphData:any;
+	let dustGraphData:any;
+	let uvGraphData:any;
+
+	onMount(async () => {
+		tempGraphData = await fetch('/api/data?topic=app/temp&amount=1000').then(res => res.json());
+		humGraphData = await fetch('/api/data?topic=app/humidity&amount=1000').then(res => res.json());
+		dustGraphData = await fetch('/api/data?topic=app/dust&amount=1000').then(res => res.json());
+		uvGraphData = await fetch('/api/data?topic=app/uv&amount=1000').then(res => res.json());
+	});
 </script>
 
 <div class="flex flex-col self-center text-white items-center p-8 bg-zinc-900 w-full">
@@ -16,37 +28,10 @@
 		{/each}
 	</div>
 	<WattGraph topicArray={['watt']} nameArray={['Plug1']}/>
-	<!-- <div class="flex flex-row flex-wrap w-full">
-		{#each Array(8) as _, i}
-			<Light name={`Light ${i + 1}`} SwitchName={`light/${i}`} />
-		{/each}
-	</div> -->
-	<div class="max-w-xl min-w-md">
-		<!-- <LineChart data={data} options={{
-		"legend" : {
-			// "enabled": false,
-			// "alignment": "center"
-		},
-		"title" : "Power Consumption",
-		"axes" : {
-			bottom: {
-				title: "Time",
-				mapsTo: "time",
-				visible: false,
-				scaleType: "time"
-			},
-			left: {
-				title: "Power",
-				mapsTo: "payload",
-				scaleType: "linear"
-			}
-		},
-		"curve": "curveMonotoneX",
-		"resizable": true,
-		"theme": "g90",
-		}}
-	/> -->
-	</div>
+	<Graph data={tempGraphData} title="Temperature"/>
+	<Graph data={humGraphData} title="Humidity"/>
+	<Graph data={dustGraphData} title="Dust Density"/>
+	<Graph data={uvGraphData} title="UV"/>
 </div>
 
 <style>
