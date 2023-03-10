@@ -47,11 +47,19 @@
 		}
 	};
 	
-	onMount(async () => {
-		state = await fetch(`/api/read?id=${name}`)
+	const getData = async () => {
+		const res = await fetch(`/api/read?id=${name}`)
 			.then((res) => res.json())
 			.then((data) => data.value == '1' ? true : false)
 			.catch((err) => console.log(err)) ?? false;
+		return res
+	}
+
+	onMount(async () => {
+		state = await getData();
+		setInterval(async () => {
+			state = await getData();
+		}, 1000);
 	});
 </script>
 
