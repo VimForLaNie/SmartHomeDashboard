@@ -2,9 +2,7 @@
 	import { onMount } from 'svelte';
 	import Time from '../components/time.svelte';
 	import OnOffcontroller from '../components/OnOffcontroller.svelte';
-	// import WattMeter from '../components/WattMeter.svelte';
 	import WattGraph from '../components/WattGraph.svelte';
-	// import Light from '../components/Light.svelte';
 	import AC from '../components/AC.svelte';
 
 </script>

@@ -1,9 +1,7 @@
 <script lang="ts">
-	import { LineChart } from '@carbon/charts-svelte';
-	import '@carbon/styles/css/styles.css';
-	import '@carbon/charts/styles.css';
 	import { onMount } from 'svelte';
 	import WattMeter from './WattMeter.svelte';
+	import Graph from './graph.svelte';
 
 	export let topicArray = ['test'];
 	export let nameArray = ['Plug1'];
@@ -40,8 +38,8 @@
 
 	onMount(async () => {
         data = await parse();
-		console.log(data);
-		console.log(meterValue)
+		// console.log(data);
+		// console.log(meterValue)
 	});
 </script>
 
@@ -51,39 +49,8 @@
 	{/each}
 </div>
 
+<Graph data={data} />
 
-{#if data}
-<div class="w-full" style="max-height: 52rem;">
-<LineChart
-	data={data ?? []}
-	options={{
-		// legend: {
-		// 	enabled: false,
-		// 	// position: 'bottom'
-		// },
-		title: 'Power Consumption',
-		axes: {
-			bottom: {
-				title: 'Time',
-				mapsTo: 'time',
-				visible: false,
-				scaleType: 'time'
-			},
-			left: {
-				title: 'Power',
-				mapsTo: 'payload',
-				scaleType: 'linear'
-			}
-		},
-		curve: 'curveMonotoneX',
-		resizable: true,
-		theme: 'g90'
-	}}
-/>
-</div>
-{:else}
-    <p>Loading...</p>
-{/if}
 <style>
 .autoGrid {
 	display: grid;
