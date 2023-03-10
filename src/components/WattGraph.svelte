@@ -16,16 +16,18 @@
     const parse = async () => {
         let res:any = [];
         for(const [i, topic] of topicArray.entries()){
-            let temp = await getData(`/api/data?topic=${topic}&amount=10`);
+            let temp = await getData(`/api/data?topic=${topic}&amount=9999`);
             // temp.forEach((element: any, idx:any) => {
 			// 	element["group"] = nameArray[i];
             // });
 			for(let idx = 0; idx < temp.length; idx++){
 				temp[idx]["group"] = nameArray[i];
-				if(idx > 0){
+				if(idx < temp.length - 1){
 					if(temp[idx]["payload"] == ""){ continue;}
-					let dT = ((new Date(temp[idx]["time"])).getTime() - (new Date(temp[idx-1]["time"]).getTime())) / 1000;
-					let unit = parseInt(temp[idx]["payload"])/1000 * (dT / 3600);
+					let dT = ((new Date(temp[idx]["time"])).getTime() - (new Date(temp[idx+1]["time"]).getTime())) / 1000;
+					let aW = parseInt(temp[idx]["payload"])/1000;
+					let bW = parseInt(temp[idx+1]["payload"])/1000;
+					let unit = (aW+bW)/2 * (dT / 3600);
 					// console.log(`unit: ${unit} dT: ${dT} \n${temp[idx]["payload"]}`);
 					// console.log(dT, unit);
 					meterValue[i] = meterValue[i] + unit;
@@ -46,7 +48,7 @@
 
 <div class="autoGrid w-full">
 	{#each nameArray as name,i}
-		<WattMeter room="Living Room" name={name} value={meterValue[i]} />
+		<WattMeter room="Living Room" name={name} value={meterValue[i]?.toFixed(2)} />
 	{/each}
 </div>
 

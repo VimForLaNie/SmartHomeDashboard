@@ -16,7 +16,7 @@ client.connect().then(() => console.log("connected to mongodb")).catch(err => co
 export const GET: RequestHandler = async ({ url }) => {
     const amount = parseInt(url.searchParams.get('amount') ?? '0');
     const topic = url.searchParams.get('topic') ?? '';
-    const data = await client.db('MQTT').collection(topic).find().sort({_id:1}).limit(amount).toArray();
+    const data = await client.db('MQTT').collection(topic).find().sort({_id:-1}).limit(amount).toArray();
     // console.log(data);
     return json(data);
 }
