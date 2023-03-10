@@ -24,6 +24,7 @@
 			smoke = smoke.length ? smoke[0].payload : '-';
 			lpg = await fetch('/api/data?topic=lpg&amount=1').then((res) => res.json());
 			lpg = lpg.length ? lpg[0].payload : '-';
+			if(smoke > 1000 || lpg > 1000) alert("Smoke Detected");
 		}, 1000);
 	});
 </script>
@@ -37,5 +38,6 @@
 		<p class="flex self-center text-base text-gray-400 m-2">UV:{uv}</p>
 		<p class="flex self-center text-base text-gray-400 m-2">Humidity:{Humudity} %</p>
 		<p class="flex self-center text-base text-gray-400 m-2">Smoke:{smoke}</p>
+		<!-- <p class="flex self-center text-base text-gray-400 m-2">LPG:{lpg}</p> -->
 	</div>
 </div>

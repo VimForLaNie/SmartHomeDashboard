@@ -25,11 +25,11 @@
 			d.payload = d.payload / 100;
 			return d;
 		})
-		dustGraphData = (await fetch('/api/data?topic=dust&amount=20').then(res => res.json())).map((d:any) => {
+		dustGraphData = (await fetch('/api/data?topic=dust&amount=1000').then(res => res.json())).map((d:any) => {
 			d.group = "Dust Density";
 			return d;
 		})
-		uvGraphData = (await fetch('/api/data?topic=uv&amount=20').then(res => res.json())).map((d:any) => {
+		uvGraphData = (await fetch('/api/data?topic=uv&amount=100').then(res => res.json())).map((d:any) => {
 			d.group = "UV";
 			return d;
 		})
