@@ -6,22 +6,14 @@
     export let value:any;
     export let unit = "-";
 
-	const alertMessage = {
-					"messages":[
-						{
-							"type":"text",
-							"text":`Smoke detected in ${room}!`
-						}
-					]
-				}
-
 	let data:any;
 	onMount(async () => {
 		// console.log(value);
-		let temp = await fetch(`/api/data?topic=${value}&amount=1`).then(res => res.json());
-		// console.log(temp)
-		data = parseInt(temp[0]["payload"]) / (value != 'uv' ? 100 : 1);
-
+		setInterval(async () => {
+			let temp = await fetch(`/api/data?topic=${value}&amount=1`).then(res => res.json());
+			// console.log(temp)
+			data = parseInt(temp[0]["payload"]) / ((value != 'uv' || value != 'vis') ? 100 : 1);
+		}, 5000);
 	})
 </script>
 

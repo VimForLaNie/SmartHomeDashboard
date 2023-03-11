@@ -13,6 +13,7 @@
 	let humGraphData: any;
 	let dustGraphData: any;
 	let uvGraphData: any;
+	let visGraphData: any;
 
 	onMount(async () => {
 		tempGraphData = (await fetch('/api/data?topic=temp&amount=1000').then((res) => res.json())).map(
@@ -41,6 +42,12 @@
 				return d;
 			}
 		);
+		visGraphData = (await fetch('/api/data?topic=vis&amount=100').then((res) => res.json())).map(
+			(d: any) => {
+				d.group = 'Visible Light';
+				return d;
+			}
+		);
 		// console.log(tempGraphData, humGraphData, dustGraphData, uvGraphData);
 	});
 </script>
@@ -57,7 +64,7 @@
 		<Show room="Living Room" name="Humidity" unit="%" value="humidity" />
 		<Show room="Living Room" name="Dust" unit="µg/m³" value="dust" />
 		<Show room="Living Room" name="UV" unit="mW/cm²" value="uv" />
-		<Show room="Living Room" name="Smoke" unit="ppm" value="smoke" />
+		<Show room="Living Room" name="Visible Light" unit="mW/cm²" value="vis" />
 		<!-- <Show room="Living Room" name="Temperature" unit="C"/> -->
 	</div>
 
@@ -66,6 +73,7 @@
 	<Graph data={humGraphData} title="Humidity" name="Humidity" />
 	<Graph data={dustGraphData} title="Dust Density" name="Dust Density" />
 	<Graph data={uvGraphData} title="UV" name="UV" />
+	<Graph data={visGraphData} title="Visible Light" name="Visible Light" />
 </div>
 <a class="float bottom-4 left-4 fixed rounded-full w-16 h-16 lineButton" href="https://line.me/R/ti/p/@538dknsg">
 	<img src="/LINE.png" alt="Add Friend" />
