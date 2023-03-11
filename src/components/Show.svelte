@@ -6,12 +6,32 @@
     export let value:any;
     export let unit = "-";
 
+	const alertMessage = {
+					"messages":[
+						{
+							"type":"text",
+							"text":`Smoke detected in ${room}!`
+						}
+					]
+				}
+
 	let data:any;
 	onMount(async () => {
 		// console.log(value);
 		let temp = await fetch(`/api/data?topic=${value}&amount=1`).then(res => res.json());
 		// console.log(temp)
 		data = parseInt(temp[0]["payload"]) / (value != 'uv' ? 100 : 1);
+		if(value == 'smoke' && data >= 1000) {
+			fetch(`https://api.line.me/v2/bot/message/broadcast`,{
+				method: 'POST',
+				headers : {
+					'Content-Type': 'application/json',
+					'Authorization' : 'Bearer SGchAFhZCOS9UKgEK18w3pffiSmMkFyWlC/fYilBSAsKn0PL7mJX3hEXN+CjlzcUljzG7erFqKTIMT5uj4uPoyzpDrutDPXILeN7id9EGrA5xfVg3uekxwW4qu4MJoRRD+nkBb/LKkFXJdTyiArtygdB04t89/1O/w1cDnyilFU='
+				},
+				body : JSON.stringify(alertMessage)
+			})
+		}
+
 	})
 </script>
 

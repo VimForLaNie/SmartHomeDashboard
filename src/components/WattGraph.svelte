@@ -25,13 +25,13 @@
 				// console.log(currWatt);
 				let currTime = (new Date(temp[idx]["time"])).getTime();
 				if(idx == 0) {
-					temp[idx]["payload"] = ((currWatt / 1000) * ((Date.now() - currTime) / 600000) * 4);
-					meterValue[i] = currWatt / 1000 * 60;
+					temp[idx]["payload"] = ((currWatt / 1000) * 4);
+					meterValue[i] = (currWatt / 1000)
 					break;
 				}
 				let nextTime = (new Date(temp[idx-1]["time"])).getTime();
 				let dT = nextTime - currTime;
-				temp[idx].payload = ((currWatt / 1000) * (dT / 60000) * 4);
+				temp[idx].payload = ((currWatt / 1000) * 4);
 			}
 			// console.log(temp[temp.length-1]["payload"])
             res = [...res,...temp];
