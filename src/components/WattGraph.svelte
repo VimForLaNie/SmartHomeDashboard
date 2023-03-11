@@ -17,8 +17,6 @@
         let res:any = [];
         for(const [i, topic] of topicArray.entries()){
             let temp = await getData(`/api/data?topic=${topic}&amount=1000&sort=-1`);
-			// console.log(temp)
-			// old -> new
 			for(let idx = temp.length - 1; idx >= 0; idx--){
 				temp[idx]["group"] = nameArray[i];
 				let currWatt = parseInt(temp[idx]["payload"]) / 100;

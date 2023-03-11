@@ -33,7 +33,7 @@
 		acTemp += 1;
 		// acTemp = acTemp > 30 ? 30 : acTemp;
 		sync("ac",acTemp);
-		update("ac/tempup",1);
+		update("ac/tempup",acTemp);
 	};
 
 	const decreaseTemp = () => {
@@ -42,7 +42,7 @@
 		acTemp -= 1;
 		// acTemp = acTemp < 16 ? 16 : acTemp;
 		sync("ac",acTemp);
-		update("ac/tempdown",1);
+		update("ac/tempdown",acTemp);
 	};
 
 	const sync = async (name,value:number) => {
